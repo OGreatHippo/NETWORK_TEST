@@ -57,10 +57,11 @@ void AMyCharacter::StaminaResources(float DeltaTime)
 	
 	else
 	{
-		if(CurrentStamina > 0 && CanSprint)
+		if(CurrentStamina > 0 && CanSprint && GetCharacterMovement()->Velocity.Length() > 0)
 		{
 			CurrentStamina -= StaminaUsage * DeltaTime;
 		}
+		
 		else
 		{
 			Exhausted = true;
