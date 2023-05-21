@@ -15,71 +15,70 @@ AMyCharacter::AMyCharacter()
 void AMyCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
-void AMyCharacter::XMove(const float XValue)
+void AMyCharacter::XMove(const float xValue)
 {
-	AddMovementInput(GetActorRightVector() * XValue);
+	AddMovementInput(GetActorRightVector() * xValue);
 }
 
-void AMyCharacter::ZMove(const float ZValue)
+void AMyCharacter::ZMove(const float zValue)
 {
-	AddMovementInput(GetActorForwardVector() * ZValue);
+	AddMovementInput(GetActorForwardVector() * zValue);
 }
 
 void AMyCharacter::Sprint()
 {
-	GetCharacterMovement()->MaxWalkSpeed = SprintSpeed;
-	IsSprinting = true;
+	GetCharacterMovement()->MaxWalkSpeed = sprintSpeed;
+	isSprinting = true;
 }
 
 void AMyCharacter::StopSprinting()
 {
-	GetCharacterMovement()->MaxWalkSpeed = WalkSpeed;
-	IsSprinting = false;
+	GetCharacterMovement()->MaxWalkSpeed = walkSpeed;
+	isSprinting = false;
 }
 
-void AMyCharacter::StaminaResources(float DeltaTime)
+void AMyCharacter::StaminaResources(float deltaTime)
 {
-	if(!IsSprinting)
+	if(!isSprinting)
 	{
-		if(CurrentStamina < MaxStamina)
+		if(currentStamina < maxStamina)
 		{
-			CurrentStamina += StaminaRecharge * DeltaTime;
+			currentStamina += staminaRecharge * deltaTime;
 		}
 		else
 		{
-			CurrentStamina = MaxStamina;
+			currentStamina = maxStamina;
 		}
 	}
 	
 	else
 	{
-		if(CurrentStamina > 0 && CanSprint && GetCharacterMovement()->Velocity.Length() > 0)
+		if(currentStamina > 0 && canSprint && GetCharacterMovement()->Velocity.Length() > 0)
 		{
-			CurrentStamina -= StaminaUsage * DeltaTime;
+			currentStamina -= staminaUsage * deltaTime;
 		}
 		
 		else
 		{
-			Exhausted = true;
+			isExhausted = true;
 			StopSprinting();
 		}
 	}
 
-	if(Exhausted)
+	if(isExhausted)
 	{
-		CanSprint = false;
+		canSprint = false;
 
-		if(CurrentStamina >= (MaxStamina * 0.01) * ExhaustionThreshold)
+		if(currentStamina >= (maxStamina * 0.01) * exhaustionThreshold)
 		{
-			Exhausted = false;
+			isExhausted = false;
 		}
 	}
 	else
 	{
-		CanSprint = true;
+		canSprint = true;
 	}
 }
 
@@ -93,11 +92,46 @@ void AMyCharacter::StopCrouching()
 	GetCharacterMovement()->UnCrouch(true);
 }
 
+void AMyCharacter::Heal(float healValue)
+{
+	currentHealth += healValue;
+	UE_LOG(LogTemp, Warning, TEXT("Heal Amount = %f"), healValue);
+}
+
+void AMyCharacter::TakeDamage(float damageValue)
+{
+	currentHealth -= damageValue;
+	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Damage Taken = %f"), damageValue));
+	UE_LOG(LogTemp, Warning, TEXT("Damage Taken = %f"), damageValue);
+}
+
+float AMyCharacter::GetHealthPercentage()
+{
+	return currentHealth / 100;
+}
+
+float AMyCharacter::GetStaminaPercentage()
+{
+	return currentStamina / 100;
+}
+
+//Test Functions
+
+void AMyCharacter::TestHeal()
+{
+	currentHealth += 10;
+}
+
+void AMyCharacter::TestDamage()
+{
+	currentHealth -= 10;
+}
+
 // Called every frame
 void AMyCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+	
 	StaminaResources(DeltaTime);
 }
 
@@ -120,5 +154,7 @@ void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	PlayerInputComponent->BindAction(TEXT("Sprint"), IE_Released, this, &AMyCharacter::StopSprinting);
 	PlayerInputComponent->BindAction(TEXT("Crouch"), IE_Pressed, this, &AMyCharacter::Crouch);
 	PlayerInputComponent->BindAction(TEXT("Crouch"), IE_Released, this, &AMyCharacter::StopCrouching);
+	PlayerInputComponent->BindAction(TEXT("Heal"), IE_Pressed, this, &AMyCharacter::TestHeal);
+	PlayerInputComponent->BindAction(TEXT("Damage"), IE_Pressed, this, &AMyCharacter::TestDamage);
 }
 

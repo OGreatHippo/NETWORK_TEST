@@ -14,16 +14,26 @@ class AMyCharacter : public ACharacter
 public:
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Stamina")
-	float CurrentStamina = 100.0f;
+	float currentStamina = 100.0f;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Health")
+	float currentHealth = 100.0f;
+
 	
 	// Sets default values for this character's properties
 	AMyCharacter();
 
 	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+	virtual void Tick(float deltaTime) override;
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	//HUD
+	UFUNCTION(BlueprintPure, Category = "Health")
+	float GetHealthPercentage();
+	UFUNCTION(BlueprintPure, Category = "Stamina")
+	float GetStaminaPercentage();
 	
 protected:
 	// Called when the game starts or when spawned
@@ -31,29 +41,42 @@ protected:
 
 private:
 	//Movement Speed Values
-	float WalkSpeed = 1000.0f;
-	float SprintSpeed = 2000.0f;
+	float walkSpeed = 1000.0f;
+	float sprintSpeed = 2000.0f;
 
 	//Stamina Values
-	float MaxStamina = 100.0f;
-	float StaminaUsage = 10.0f;
-	float StaminaRecharge = 10.0f;
-
-	//Percentage Stam before can sprint again
-	int ExhaustionThreshold = 40;
+	float maxStamina = 100.0f;
+	float staminaUsage = 10.0f;
+	float staminaRecharge = 10.0f;
+	float staminaPercent;
 	
-	bool CanSprint = false;
-	bool IsSprinting = false;
-	bool Exhausted = false;
-    	
+	//Percentage Stam before can sprint again
+	int exhaustionThreshold = 40;
+	
+	bool canSprint = false;
+	bool isSprinting = false;
+	bool isExhausted = false;
+
+	//Health
+	
+	float maxHealth = 100.0f;
+	float healthPercent;
+	
+	
 	//Movement Axis
-	void XMove(const float XValue);
-	void ZMove(const float ZValue);
+	void XMove(const float xValue);
+	void ZMove(const float zValue);
     
 	//Character Functions
 	void Sprint();
 	void StopSprinting();
-	void StaminaResources(float DeltaTime);
+	void StaminaResources(float deltaTime);
 	void Crouch();
 	void StopCrouching();
+	void Heal(float healValue);
+	void TakeDamage(float damageValue);
+	
+	//Test Functions
+	void TestHeal();
+	void TestDamage();
 };
