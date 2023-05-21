@@ -41,8 +41,7 @@ private:
 
 	//Percentage Stam before can sprint again
 	int ExhaustionThreshold = 40;
-    	
-	bool IsMoving = false;
+	
 	bool CanSprint = false;
 	bool IsSprinting = false;
 	bool Exhausted = false;
@@ -55,5 +54,6 @@ private:
 	void Sprint();
 	void StopSprinting();
 	void StaminaResources(float DeltaTime);
-
+	void Crouch();
+	void StopCrouching();
 };

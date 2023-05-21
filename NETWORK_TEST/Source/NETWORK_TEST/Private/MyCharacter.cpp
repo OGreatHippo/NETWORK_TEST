@@ -9,7 +9,6 @@ AMyCharacter::AMyCharacter()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
 }
 
 // Called when the game starts or when spawned
@@ -84,6 +83,16 @@ void AMyCharacter::StaminaResources(float DeltaTime)
 	}
 }
 
+void AMyCharacter::Crouch()
+{
+	GetCharacterMovement()->Crouch(true);
+}
+
+void AMyCharacter::StopCrouching()
+{
+	GetCharacterMovement()->UnCrouch(true);
+}
+
 // Called every frame
 void AMyCharacter::Tick(float DeltaTime)
 {
@@ -109,5 +118,7 @@ void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	PlayerInputComponent->BindAction(TEXT("Jump"), IE_Pressed, this, &AMyCharacter::Jump);
 	PlayerInputComponent->BindAction(TEXT("Sprint"), IE_Pressed, this, &AMyCharacter::Sprint);
 	PlayerInputComponent->BindAction(TEXT("Sprint"), IE_Released, this, &AMyCharacter::StopSprinting);
+	PlayerInputComponent->BindAction(TEXT("Crouch"), IE_Pressed, this, &AMyCharacter::Crouch);
+	PlayerInputComponent->BindAction(TEXT("Crouch"), IE_Released, this, &AMyCharacter::StopCrouching);
 }
 
