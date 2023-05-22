@@ -31,6 +31,7 @@ void AMyCharacter::Sprint()
 {
 	GetCharacterMovement()->MaxWalkSpeed = sprintSpeed;
 	isSprinting = true;
+	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Sprinting is %s"), (isSprinting ? "true" : "false")));
 }
 
 void AMyCharacter::StopSprinting()
@@ -94,15 +95,21 @@ void AMyCharacter::StopCrouching()
 
 void AMyCharacter::Heal(float healValue)
 {
-	currentHealth += healValue;
-	UE_LOG(LogTemp, Warning, TEXT("Heal Amount = %f"), healValue);
+	if(currentHealth + healValue < maxHealth)
+	{
+		currentHealth += healValue;
+		UE_LOG(LogTemp, Warning, TEXT("Heal Amount = %f"), healValue);
+	}
+
+	else
+	{
+		currentHealth = maxHealth;
+	}
 }
 
 void AMyCharacter::TakeDamage(float damageValue)
 {
 	currentHealth -= damageValue;
-	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Damage Taken = %f"), damageValue));
-	UE_LOG(LogTemp, Warning, TEXT("Damage Taken = %f"), damageValue);
 }
 
 float AMyCharacter::GetHealthPercentage()
@@ -113,6 +120,16 @@ float AMyCharacter::GetHealthPercentage()
 float AMyCharacter::GetStaminaPercentage()
 {
 	return currentStamina / 100;
+}
+
+bool AMyCharacter::GetIsSprinting()
+{
+	return isSprinting;
+}
+
+float AMyCharacter::GetSpeed()
+{
+	return GetMovementComponent()->Velocity.Length();
 }
 
 //Test Functions

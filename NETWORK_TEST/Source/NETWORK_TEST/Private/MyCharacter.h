@@ -12,13 +12,10 @@ class AMyCharacter : public ACharacter
 	GENERATED_BODY()
 
 public:
-	
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Stamina")
-	float currentStamina = 100.0f;
-
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Health")
 	float currentHealth = 100.0f;
-
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Stamina")
+	float currentStamina = 100.0f;
 	
 	// Sets default values for this character's properties
 	AMyCharacter();
@@ -34,6 +31,13 @@ public:
 	float GetHealthPercentage();
 	UFUNCTION(BlueprintPure, Category = "Stamina")
 	float GetStaminaPercentage();
+
+	//Animations
+	UFUNCTION(BlueprintPure, Category = "Speed")
+	bool GetIsSprinting();
+	UFUNCTION(BlueprintPure, Category = "Speed")
+	float GetSpeed();
+
 	
 protected:
 	// Called when the game starts or when spawned
@@ -45,6 +49,7 @@ private:
 	float sprintSpeed = 2000.0f;
 
 	//Stamina Values
+	
 	float maxStamina = 100.0f;
 	float staminaUsage = 10.0f;
 	float staminaRecharge = 10.0f;
