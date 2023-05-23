@@ -4,8 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
-#include "MyCharacter.generated.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Engine.h"
+#include "Net/UnrealNetwork.h"
+#include "MyCharacter.generated.h"
 
 UCLASS()
 class AMyCharacter : public ACharacter
@@ -13,11 +15,6 @@ class AMyCharacter : public ACharacter
 	GENERATED_BODY()
 
 public:
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Health")
-	float currentHealth = 100.0f;
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Stamina")
-	float currentStamina = 100.0f;
-	
 	// Sets default values for this character's properties
 	AMyCharacter();
 
@@ -27,6 +24,12 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Health")
+	float currentHealth = 100.0f;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Stamina")
+	float currentStamina = 100.0f;
+	
 	//HUD
 	UFUNCTION(BlueprintPure, Category = "Health")
 	float GetHealthPercentage();
@@ -40,6 +43,9 @@ public:
 	float GetSpeed();
 
 	
+	
+	
+	
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -50,24 +56,20 @@ private:
 	float sprintSpeed = 2000.0f;
 
 	//Stamina Values
-	
 	float maxStamina = 100.0f;
 	float staminaUsage = 10.0f;
 	float staminaRecharge = 10.0f;
 	float staminaPercent;
+	bool isSprinting = false;
 	
 	//Percentage Stam before can sprint again
 	int exhaustionThreshold = 40;
-	
 	bool canSprint = false;
-	bool isSprinting = false;
 	bool isExhausted = false;
 
 	//Health
-	
 	float maxHealth = 100.0f;
 	float healthPercent;
-	
 	
 	//Movement Axis
 	void XMove(const float xValue);
@@ -75,6 +77,12 @@ private:
     
 	//Character Functions
 	void Sprint();
+	
+	UFUNCTION(Server, Reliable, WithValidation)
+	void Server_Sprint(bool _isSprinting);
+	bool Server_Sprint_Validate(bool _isSprinting);
+	void Server_Sprint_Implementation(bool _isSprinting);
+	
 	void StopSprinting();
 	void StaminaResources(float deltaTime);
 	void Crouch();

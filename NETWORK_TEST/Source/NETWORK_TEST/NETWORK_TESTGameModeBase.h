@@ -4,7 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
+#include "Engine.h"
+#include "Net/UnrealNetwork.h"
 #include "NETWORK_TESTGameModeBase.generated.h"
+
 
 /**
  * 

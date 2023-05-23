@@ -30,7 +30,18 @@ void AMyCharacter::Sprint()
 {
 	GetCharacterMovement()->MaxWalkSpeed = sprintSpeed;
 	isSprinting = true;
-	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Sprinting is %s"), (isSprinting ? "true" : "false")));
+
+	Server_Sprint(isSprinting);
+}
+
+bool AMyCharacter::Server_Sprint_Validate(bool _isSprinting)
+{
+	return true;
+}
+
+void AMyCharacter::Server_Sprint_Implementation(bool _isSprinting)
+{
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Server Sprint is Called"));
 }
 
 void AMyCharacter::StopSprinting()
