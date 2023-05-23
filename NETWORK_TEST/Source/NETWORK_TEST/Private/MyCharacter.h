@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "MyCharacter.generated.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 UCLASS()
 class AMyCharacter : public ACharacter

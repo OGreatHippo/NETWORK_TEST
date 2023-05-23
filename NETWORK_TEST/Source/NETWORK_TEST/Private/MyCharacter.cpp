@@ -2,7 +2,6 @@
 
 
 #include "MyCharacter.h"
-#include "GameFramework/CharacterMovementComponent.h"
 
 // Sets default values
 AMyCharacter::AMyCharacter()
